@@ -3,6 +3,11 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         tasks: []
+    },
+    mutations: {
+        setTasks (state, { tasks }) {
+            state.tasks = tasks;
+        }
     }
 });
 
@@ -68,6 +73,7 @@ window.vm = new Vue({
                 console.log(self === this);
                 this.taskLoaded = true;
                 self.tasks = tasks;
+                this.$store.commit('setTasks', { tasks });
             });
         },
         addTask: function() {
