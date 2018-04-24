@@ -1,3 +1,11 @@
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+    state: {
+        count: 0
+    }
+});
+
 Vue.component('hover-card', {
     mounted: function() {
         $(this.$el).hoverCard();
@@ -39,6 +47,7 @@ Vue.filter('formatDate', function(date) {
 
 window.vm = new Vue({
     el: '#app',
+    store,
     data: function() {
         return {
             heading: 'To Do List',
