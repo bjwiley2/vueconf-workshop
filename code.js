@@ -4,6 +4,10 @@ const store = new Vuex.Store({
     state: {
         tasks: []
     },
+    getters: {
+        allTasks: state => state.tasks,
+        activeTasks: state => state.tasks.filter(t => !t.completed)
+    },
     mutations: {
         setTasks (state, { tasks }) {
             state.tasks = tasks;
@@ -120,7 +124,7 @@ window.vm = new Vue({
             }
 
             const searchable = self.searchValue.toLowerCase();
-            return self.tasks.filter(value => value.task.toLowerCase().includes(searchable));
+            return self.$store.getters.allTasks.filter(value => value.task.toLowerCase().includes(searchable));
         }
     }
 });
