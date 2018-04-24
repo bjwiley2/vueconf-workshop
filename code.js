@@ -2,7 +2,15 @@ Vue.component('hover-card', {
     mounted: function() {
         $(this.$el).hoverCard();
     },
-    template: '<div class="hover-card"><a tabindex="-1" href="javascript:void(0);"><i class="fa fa-info-circle" aria-hidden="true"></i></a><div class="hover-detail slide-right bottom-positioned"><slot></slot></div></div>'
+    template: `
+        <div class="hover-card">
+            <a tabindex="-1" href="javascript:void(0);">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+            </a>
+            <div class="hover-detail slide-right bottom-positioned">
+                <slot></slot>
+            </div>
+        </div>`
 });
 
 
@@ -45,10 +53,11 @@ window.vm = new Vue({
         this.getTasks();
     },
     methods: {
-        getTasks: function() {
+        getTasks() {
             var self = this;
-            api.getList(function(tasks) {
-                self.taskLoaded = true;
+            api.getList(tasks => {
+                console.log(self === this);
+                this.taskLoaded = true;
                 self.tasks = tasks;
             });
         },
@@ -66,11 +75,8 @@ window.vm = new Vue({
             });
         },
         deleteTask: function(index) {
-            var self = this;
-            var task = self.tasks[index];
-            api.delete(task.id, function() {
-                self.tasks.splice(index, 1);
-            });
+            var task = this.tasks[index];
+            api.delete(task.id, () => this.tasks.splice(index, 1));
         },
         editTask: function(task) {
             var self = this;
@@ -98,9 +104,8 @@ window.vm = new Vue({
                 return self.tasks;
             }
 
-            return self.tasks.filter(function(value) {
-                return value.task.toLowerCase().includes(self.searchValue.toLowerCase());
-            });
+            const searchable = self.searchValue.toLowerCase();
+            return self.tasks.filter(value => value.task.toLowerCase().includes(searchable));
         }
     }
 });
