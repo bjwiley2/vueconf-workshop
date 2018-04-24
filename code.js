@@ -12,6 +12,11 @@ const store = new Vuex.Store({
         setTasks (state, { tasks }) {
             state.tasks = tasks;
         }
+    },
+    actions: {
+        loadTasks ({ commit }) {
+            api.getList(tasks => commit('setTasks', { tasks }));
+        }
     }
 });
 
@@ -72,13 +77,8 @@ window.vm = new Vue({
     },
     methods: {
         getTasks() {
-            var self = this;
-            api.getList(tasks => {
-                console.log(self === this);
-                this.taskLoaded = true;
-                self.tasks = tasks;
-                this.$store.commit('setTasks', { tasks });
-            });
+            this.$store.dispatch('loadTasks');
+            this.taskLoaded = true;
         },
         addTask: function() {
             var self = this;
@@ -116,15 +116,16 @@ window.vm = new Vue({
         }
     },
     computed: {
-        filteredTasks: function() {
-            var self = this
+        filteredTasks () {
+            const self = this;
+            const tasks = self.$store.getters.allTasks;
 
             if (!self.searchValue) {
-                return self.tasks;
+                return tasks;
             }
 
             const searchable = self.searchValue.toLowerCase();
-            return self.$store.getters.allTasks.filter(value => value.task.toLowerCase().includes(searchable));
+            return tasks.filter(t => t.task.toLowerCase().includes(searchable));
         }
     }
 });
