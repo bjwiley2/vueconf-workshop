@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>VueJS Workshop</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://onrealm.org/Bundles/Styles/site?v=BvcpfbJ_WnO5avCY7_UOK9q7TpBWQ3ixWj-nspW1AlY1" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div id="app" v-cloak>
+        <h2>{{heading}}</h2>
+        <input type="text" placeholder="Search..." v-model="searchValue">
+        <hr>
+        <form v-on:submit.prevent="addTask">
+            <input type="text" required placeholder="New task" v-focus v-model="newTask">
+            <input type="submit" value="Add Task">
+        </form>
+        <ol>
+            <li v-for="(t, i) in filteredTasks">
+                <div v-if="t.id !== taskModel.id">
+                    <span class="pointer" v-on:click="completeTask(t)" v-bind:class="{ 'strikethrough': t.completed }">{{ t.task | truncate(20) }}</span>
+                    <hover-card>{{t.dateAdded | formatDate}}</hover-card>
+                    <button v-on:click="editTask(t)">Edit</button>
+                    <button v-on:click="deleteTask(i)">Delete</button>
+                </div>
+
+                <form v-if="t.id === taskModel.id" v-on:submit.prevent="saveTask">
+                    <input type="text" required placeholder="New task" v-focus v-model="taskModel.task">
+                    <input type="submit" value="Save Task">
+                </form>
+            </li>
+        </ol>
+
+        <p v-if="!taskLoaded">Loading task...</p>
+        <p v-if="taskLoaded && filteredTasks.length === 0">No task exists</p>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="https://onrealm.org/Bundles/Scripts/Vendor?v=jY0FoWE0hhQxdd7zCrSrdlOBv_vgU7xXtzUNZFUY5SM1"></script>
+    <script src="https://onrealm.org/Bundles/Scripts/Common?v=nkaSPaueiwzP5YZEFKyO2iMdy9EzBgFl5gwoGknD1w81"></script>
+    <script src="https://onrealm.org/Bundles/Scripts/Plugins?v=Sw1asq3TnOoCe8b9JNDBUxg8tQdjeIlKXp1kC_0axhs1"></script>
+    <script src="https://unpkg.com/vue@2.2.4" type="text/javascript"></script>
+    <script src="api.js" type="text/javascript"></script>
+    <script src="code.js" type="text/javascript"></script>
+</body>
+
+</html>

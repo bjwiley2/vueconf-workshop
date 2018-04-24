@@ -1,0 +1,16 @@
+[v-cloak] {
+    display: none;
+}
+
+#app {
+    width: 500px;
+    margin: auto;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.pointer {
+    cursor: pointer;
+}
